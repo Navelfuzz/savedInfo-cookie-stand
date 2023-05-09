@@ -1,177 +1,67 @@
-'use strict';
+/*
+TODO: Store the min/max hourly customers, and the avg cookies per customer, in object properties.
+TODO: Use a method of that object to generate a random number of customers per hour. 
+TODO: Calculate the simulated amounts of cookies purchased for each hour based on avg cookies 
+purchased and the random number of customers generated.
+TODO: store cookies at each location using - separate array
+TODO: Display the values of each array as unordered lists in the browser.
+TODO: Calculating the sum of these hourly totals; your output for each location should look like 
+on sales.html
+*/
 
-// Tony is a volunteer for the kitten rescue... they need a way to get the profiles of kittens who will be up for adoption onto the page... new kittens come in and they need to be added. Tony knows a little bit of javascript... he can make objects!
+/*
+function populateHoursArr(a, b) {
+    const hours = [];
+    for (let i = a; i <=b; i++) {
+        if (i === 12) (
+            hours.push(`${i}pm`);
+        ) else if (i < 12) {
+            hours.push(`${i}am`);
+        } else {
+            hours.push(`${i-12}pm`);
+        }
+    }
+    console.log(hours);
+}
+*/
 
-// ? what are we going to display?
-// Kittens
-// TODO figure out what info about each kitten we need to show:
-// * name
-// * age with a function - 3 months and 12 months
-// * interests []
-// * isGoodWithCats
-// * isGoodWithDogs
-// * isGoodWithKids
-// * photo
-
-// **** GLOBAL VARIABLES ****
-
-// *** STEP 1: Grab the window into the DOM ***
-let kittenSection = document.getElementById('kitten-profiles');
-
-console.dir(kittenSection);
-
-// **** HELPFUL START FOR LAB ****
-// !!! HELPFUL FOR LAB
 let hours = ['6am', '7am', '8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm', '7pm'];
 
+let storeSection = document.getElementById('stores');
 
 let seattle = {
-  name: 'Seattle',
-  minCust: 23,
-  maxCust: 65,
-  avgCookieBought: 6.3,
-};
-
-// *** OBJECT LITERALS ***
-
-let frankie = {
-  name: 'Frankie',
-  age: 0,
-  interests: ['dry food', 'mice toys', 'cat nip'],
-  isGoodWithCats: true,
-  isGoodWithDogs: false,
-  isGoodWithKids: true,
-  photo: 'img/frankie.jpeg',
-  randomAgeGenerator: function(min, max){
-    return Math.floor(Math.random() * (max - min + 1) + min); // inclusive min and max - got from MDN
-  },
-  getAge: function(){
-    this.age = this.randomAgeGenerator(3,12);
-  },
-  render: function(){
-    this.getAge(); // this method call will populate the kitty's age
-    // THIS METHOD WILL DO THE DOM MANIPULATION
-    // ** Create the element **
-    let articleEle = document.createElement('article');
-
-    // ** ADD TO DOM ** parent.appendChild(child)
-    kittenSection.appendChild(articleEle);
-
-    let kittenHeading = document.createElement('h2'); // html creation
-    kittenHeading.innerText = this.name; // context
-    articleEle.appendChild(kittenHeading); // dom addition
-
-    //  ! HELPFUL FOR YOUR UL/LI CREATION
-    let kittenUL = document.createElement('ul');
-    articleEle.appendChild(kittenUL);
-
-    for(let i = 0; i < this.interests.length; i++){
-      let interestLI = document.createElement('li');
-      interestLI.innerText = this.interests[i];
-      kittenUL.appendChild(interestLI);
-    }
-
-    let ageElem = document.createElement('p');
-    ageElem.innerText = `Age: ${this.age} months`;
-    articleEle.appendChild(ageElem);
-
-    let imgElem = document.createElement('img');
-    imgElem.src = this.photo;
-    imgElem.alt = `${this.name} is an adorable ${this.age} month old kitten.`;
-    articleEle.appendChild(imgElem);
-  }
-};
-
-
-let jumper = {
-  name: 'Jumper',
-  age: 0,
-  interests: ['wet food', 'treats', 'fish toys'],
-  isGoodWithCats: true,
-  isGoodWithDogs: true,
-  isGoodWithKids: true,
-  photo: 'img/jumper.jpeg',
-  randomAgeGenerator: function(min, max){
+  location: 'Seattle',
+  minCustomer: '23',
+  maxCustomer: '65',
+  avgSale: '6.3',
+  numCustomer: '0', //will hold a random number of customers
+  randNumCust: function (min, max){
     return Math.floor(Math.random() * (max - min + 1) + min);
   },
-  getAge: function(){
-    this.age = this.randomAgeGenerator(3,12);
-  },
-  render: function(){
-    this.getAge();
-    let articleEle = document.createElement('article');
-    kittenSection.appendChild(articleEle);
-
-    let kittenHeading = document.createElement('h2');
-    kittenHeading.innerText = this.name;
-    articleEle.appendChild(kittenHeading);
-
-    let kittenUL = document.createElement('ul');
-    articleEle.appendChild(kittenUL);
-
-    for(let i = 0; i < this.interests.length; i++){
-      let interestLI = document.createElement('li');
-      interestLI.innerText = this.interests[i];
-      kittenUL.appendChild(interestLI);
-    }
-
-    let ageElem = document.createElement('p');
-    ageElem.innerText = `Age: ${this.age} months`;
-    articleEle.appendChild(ageElem);
-
-    let imgElem = document.createElement('img');
-    imgElem.src = this.photo;
-    imgElem.alt = `${this.name} is an adorable ${this.age} month old kitten.`;
-    articleEle.appendChild(imgElem);
+  getNum: function () {
+    this.numCustomer = this.randNumCust(this.minCustomer, this.maxCustomer); 
+    return this.numCustomer; //unnecessary?
   }
-};
 
-let serena = {
-  name: 'Serena',
-  age: 0,
-  interests: ['mice', 'lasers', 'hunting'],
-  isGoodWithCats: true,
-  isGoodWithDogs: false,
-  isGoodWithKids: true,
-  photo: 'img/serena.jpeg',
-  randomAgeGenerator: function(min, max){
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  },
-  getAge: function(){
-    this.age = this.randomAgeGenerator(3,12);
-  },
-  render: function(){
-    this.getAge();
-    let articleEle = document.createElement('article');
+  cookiePurchase: [],
+  totalCookies: 0,
 
-    kittenSection.appendChild(articleEle);
+  //calculate cookies and the DOM via render
+  render: function () {
+    for (let i = 0; i < hours.length; i++){
+        let cookiesBought = Math.ceil(this.avgSale * this.getNum()); //round the numbers off.
+        console.log(cookiesBought);
+        this.totalCookies += cookiesBought; //ading the cookies bought to the total per iteration.
 
-    let kittenHeading = document.createElement('h2');
-    kittenHeading.innerText = this.name;
-    articleEle.appendChild(kittenHeading);
-
-    let kittenUL = document.createElement('ul');
-    articleEle.appendChild(kittenUL);
-
-    for(let i = 0; i < this.interests.length; i++){
-      let interestLI = document.createElement('li');
-      interestLI.innerText = this.interests[i];
-      kittenUL.appendChild(interestLI);
+        this.cookiePurchase.push(cookiesBought); //adds to the end of the array
     }
-
-    let ageElem = document.createElement('p');
-    ageElem.innerText = `Age: ${this.age} months`;
-    articleEle.appendChild(ageElem);
-
-    let imgElem = document.createElement('img');
-    imgElem.src = this.photo;
-    imgElem.alt = `${this.name} is an adorable ${this.age} month old kitten.`;
-    articleEle.appendChild(imgElem);
   }
-};
+  console.log(this.cookiePurchase);
 
-// *** EXECUTABLE (executes on page load) CODE ***
-frankie.render();
-jumper.render();
-serena.render();
-console.log(frankie);
+  console.log('TotalSales:', this.totalCookies);
+
+  /***DOM Manipulation */
+  let storeHeading = document.createElement('h2');
+  storeHeading.innerText = this.location;
+
+}
